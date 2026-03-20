@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小笛老师 - 奥数每日一题</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 题目区域 */
+        .question-section {
+            padding: 25px 20px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .section-date {
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 20px;
+        }
+        
+        /* 年级题目区块 */
+        .grade-section {
+            margin-bottom: 25px;
+        }
+        
+        .grade-title {
+            font-size: 16px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .question-image-container {
+            background: #fafafa;
+            border-radius: 12px;
+            padding: 15px;
+            border: 2px dashed #e0e0e0;
+            position: relative;
+        }
+        
+        .question-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+        
+        /* 多页答案导航 */
+        .answer-nav {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            gap: 15px;
+        }
+        
+        .answer-nav.show {
+            display: flex;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .page-indicator {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        /* 答案标签 */
+        .answer-badge {
+            display: inline-block;
+            background: #52c41a;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        /* 提示文字区域 */
+        .hint-section {
+            padding: 20px;
+            text-align: center;
+            background: #fff5f5;
+            border-top: 1px solid #ffe0e0;
+            border-bottom: 1px solid #ffe0e0;
+        }
+        
+        .hint-text {
+            color: #e53935;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        
+        .hint-icon {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        
+        /* 更新说明区域 */
+        .update-notice {
+            padding: 15px 20px;
+            background: #e8f5e9;
+            border-top: 1px solid #c8e6c9;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        
+        .update-notice p {
+            font-size: 13px;
+            color: #2e7d32;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+        
+        .update-notice .highlight {
+            font-weight: 600;
+            color: #1b5e20;
+        }
+        
+        /* 二维码区域 */
+        .qr-section {
+            padding: 25px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, #fafafa 0%, #f0f0f0 100%);
+        }
+        
+        .qr-image {
+            max-width: 260px;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .qr-hint {
+            margin-top: 15px;
+            color: #52c41a;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .qr-subtext {
+            margin-top: 8px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        /* 底部信息 */
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background: #f5f5f5;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        /* 加载失败提示 */
+        .image-error {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                border-radius: 12px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+            
+            .hint-text {
+                font-size: 15px;
+            }
+            
+            .qr-image {
+                max-width: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 上方：题目区域 -->
+        <div class="question-section">
+            <div class="section-title">📐 小笛老师奥数每日一题</div>
+            <p class="section-date" id="currentDate"></p>
+            
+            <!-- 1-2 年级 -->
+            <div class="grade-section">
+                <div class="grade-title">📚 1-2 年级</div>
+                <div class="question-image-container">
+                    <span class="answer-badge" id="badge1" style="display: none;">✅ 答案已公布</span>
+                    <img 
+                        class="question-image" 
+                        id="questionImage1" 
+                        src="" 
+                        alt="1-2 年级题目"
+                        onload="document.getElementById('error1').style.display='none';"
+                        onerror="this.onerror=null; this.src=''; document.getElementById('error1').style.display='block';"
+                    >
+                    <div class="image-error" id="error1" style="display: none;">
+                        ⚠️ 图片加载失败
+                    </div>
+                    <div class="answer-nav" id="nav1">
+                        <button class="nav-btn" id="prev1" onclick="changePage(1, -1)">◀ 上一页</button>
+                        <span class="page-indicator" id="page1">1 / 1</span>
+                        <button class="nav-btn" id="next1" onclick="changePage(1, 1)">下一页 ▶</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3-4 年级 -->
+            <div class="grade-section">
+                <div class="grade-title">📚 3-4 年级</div>
+                <div class="question-image-container">
+                    <span class="answer-badge" id="badge2" style="display: none;">✅ 答案已公布</span>
+                    <img 
+                        class="question-image" 
+                        id="questionImage2" 
+                        src="" 
+                        alt="3-4 年级题目"
+                        onload="document.getElementById('error2').style.display='none';"
+                        onerror="this.onerror=null; this.src=''; document.getElementById('error2').style.display='block';"
+                    >
+                    <div class="image-error" id="error2" style="display: none;">
+                        ⚠️ 图片加载失败
+                    </div>
+                    <div class="answer-nav" id="nav2">
+                        <button class="nav-btn" id="prev2" onclick="changePage(2, -1)">◀ 上一页</button>
+                        <span class="page-indicator" id="page2">1 / 1</span>
+                        <button class="nav-btn" id="next2" onclick="changePage(2, 1)">下一页 ▶</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 5-6 年级 -->
+            <div class="grade-section">
+                <div class="grade-title">📚 5-6 年级</div>
+                <div class="question-image-container">
+                    <span class="answer-badge" id="badge3" style="display: none;">✅ 答案已公布</span>
+                    <img 
+                        class="question-image" 
+                        id="questionImage3" 
+                        src="" 
+                        alt="5-6 年级题目"
+                        onload="document.getElementById('error3').style.display='none';"
+                        onerror="this.onerror=null; this.src=''; document.getElementById('error3').style.display='block';"
+                    >
+                    <div class="image-error" id="error3" style="display: none;">
+                        ⚠️ 图片加载失败
+                    </div>
+                    <div class="answer-nav" id="nav3">
+                        <button class="nav-btn" id="prev3" onclick="changePage(3, -1)">◀ 上一页</button>
+                        <span class="page-indicator" id="page3">1 / 1</span>
+                        <button class="nav-btn" id="next3" onclick="changePage(3, 1)">下一页 ▶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 中间：提示文字 -->
+        <div class="hint-section">
+            <p class="hint-text">
+                <span class="hint-icon">🎁</span>
+                加群免费获得思路详解和更多奥数学习资源.
+		若群满或二维码失效请添加小笛老师手动拉群. 
+		小笛老师: 13522419648
+            </p>
+        </div>
+        
+        <!-- 更新说明 -->
+        <div class="update-notice">
+            <p>⏰ <span class="highlight">每日 18:30</span> 更新当天题目</p>
+            <p>⏰ <span class="highlight">每日 20:00</span> 公布题目答案</p>
+            <p>📖 <span class="highlight">进群获得更多详细解析</span> 和解题思路</p>
+        </div>
+        
+        <!-- 下方：二维码区域 -->
+        <div class="qr-section">
+            <img 
+                class="qr-image" 
+                src="group.jpg" 
+                alt="微信群二维码"
+                id="qrImage"
+            >
+            <p class="qr-hint">👆 长按识别二维码进群</p>
+            <p class="qr-subtext">每日更新 · 免费答疑 · 学习交流</p>
+        </div>
+        
+        <!-- 底部 -->
+        <div class="footer">
+            奥数每日一题 · 坚持学习每天进步
+        </div>
+    </div>
+    
+    <!-- 引入独立配置文件 -->
+    <script src="config.js"></script>
+    
+    <script>
+        // ==================== 当前页码状态 ====================
+        let currentPage = {
+            grade1: 1,
+            grade2: 1,
+            grade3: 1
+        };
+        
+        // ==================== 获取日期信息 ====================
+        function getDateInfo() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            
+            // 计算时间分钟数（用于比较）
+            const currentMinutes = hour * 60 + minute;
+            const time1830 = 18 * 60 + 30;  // 18:30 更新题目
+            const time2000 = 20 * 60;       // 20:00 更新答案
+            
+            // 判断显示哪天的题目
+            let targetDay;
+            let showAnswer = false;
+            
+            if (currentMinutes < time1830) {
+                // 00:00 - 18:29：显示昨天的题目和答案
+                const yesterday = new Date(now);
+                yesterday.setDate(day - 1);
+                targetDay = yesterday.getDate();
+                showAnswer = true;
+            } else if (currentMinutes < time2000) {
+                // 18:30 - 19:59：显示今天的题目，不显示答案
+                targetDay = day;
+                showAnswer = false;
+            } else {
+                // 20:00 - 23:59：显示今天的题目和答案
+                targetDay = day;
+                showAnswer = true;
+            }
+            
+            // 处理跨月情况
+            if (targetDay <= 0) {
+                const lastMonth = new Date(year, month - 2, 0);
+                targetDay = lastMonth.getDate();
+            }
+            
+            // 如果日期超过 31，显示 31 号的题
+            if (targetDay > 31) {
+                targetDay = 31;
+            }
+            
+            return {
+                year,
+                month,
+                day,
+                targetDay,
+                showAnswer,
+                dateStr: `${year}年${String(month).padStart(2, '0')}月${String(day).padStart(2, '0')}日`
+            };
+        }
+        
+        // ==================== 计算图片文件名 ====================
+        function getImageFile(grade, day, isAnswer, pageNum = 1) {
+            const offsets = {
+                grade1: { question: 1, answer: 32 },
+                grade2: { question: 63, answer: 94 },
+                grade3: { question: 125, answer: 156 }
+            };
+            
+            const baseNum = offsets[grade][isAnswer ? 'answer' : 'question'] + day;
+            const finalNum = isAnswer ? baseNum + pageNum - 1 : baseNum;
+            
+            return `幻灯片${finalNum}.JPG`;
+        }
+        
+        // ==================== 获取答案页数（从配置文件读取）====================
+        function getAnswerPages(grade, day) {
+            if (typeof MULTI_PAGE_ANSWERS === 'undefined') {
+                return 1;
+            }
+            const config = MULTI_PAGE_ANSWERS[grade];
+            return config && config[day] ? config[day] : 1;
+        }
+        
+        // ==================== 切换答案页码 ====================
+        function changePage(gradeNum, delta) {
+            const gradeMap = {1: 'grade1', 2: 'grade2', 3: 'grade3'};
+            const grade = gradeMap[gradeNum];
+            const dateInfo = getDateInfo();
+            const maxPages = getAnswerPages(grade, dateInfo.targetDay);
+            
+            currentPage[grade] += delta;
+            
+            if (currentPage[grade] < 1) currentPage[grade] = 1;
+            if (currentPage[grade] > maxPages) currentPage[grade] = maxPages;
+            
+            updateImage(gradeNum, dateInfo);
+        }
+        
+        // ==================== 更新图片 ====================
+        function updateImage(gradeNum, dateInfo) {
+            const gradeMap = {1: 'grade1', 2: 'grade2', 3: 'grade3'};
+            const grade = gradeMap[gradeNum];
+            
+            const imgEl = document.getElementById(`questionImage${gradeNum}`);
+            const badgeEl = document.getElementById(`badge${gradeNum}`);
+            const navEl = document.getElementById(`nav${gradeNum}`);
+            const pageEl = document.getElementById(`page${gradeNum}`);
+            const prevBtn = document.getElementById(`prev${gradeNum}`);
+            const nextBtn = document.getElementById(`next${gradeNum}`);
+            
+            const maxPages = getAnswerPages(grade, dateInfo.targetDay);
+            
+            if (dateInfo.showAnswer) {
+                badgeEl.style.display = 'inline-block';
+                const fileName = getImageFile(grade, dateInfo.targetDay, true, currentPage[grade]);
+                imgEl.src = fileName + '?t=' + Date.now();
+                
+                if (maxPages > 1) {
+                    navEl.classList.add('show');
+                    pageEl.textContent = `${currentPage[grade]} / ${maxPages}`;
+                    prevBtn.disabled = currentPage[grade] <= 1;
+                    nextBtn.disabled = currentPage[grade] >= maxPages;
+                } else {
+                    navEl.classList.remove('show');
+                }
+            } else {
+                badgeEl.style.display = 'none';
+                const fileName = getImageFile(grade, dateInfo.targetDay, false);
+                imgEl.src = fileName + '?t=' + Date.now();
+                navEl.classList.remove('show');
+            }
+        }
+        
+        // ==================== 初始化页面 ====================
+        function initPage() {
+            const dateInfo = getDateInfo();
+            
+            document.getElementById('currentDate').textContent = dateInfo.dateStr;
+            
+            for (let i = 1; i <= 3; i++) {
+                currentPage[`grade${i}`] = 1;
+                updateImage(i, dateInfo);
+            }
+            
+            document.getElementById('qrImage').src = 'group.jpg?t=' + Date.now();
+            
+            console.log('【奥数每日一题】');
+            console.log('当前日期:', dateInfo.dateStr);
+            console.log('显示日期:', dateInfo.targetDay + '日');
+            console.log('显示答案:', dateInfo.showAnswer ? '是' : '否');
+            console.log('多页配置:', typeof MULTI_PAGE_ANSWERS !== 'undefined' ? MULTI_PAGE_ANSWERS : '未加载配置文件');
+        }
+        
+        document.addEventListener('DOMContentLoaded', initPage);
+        
+        // 每分钟检查一次时间变化（用于跨时间点自动刷新）
+        setInterval(() => {
+            const dateInfo = getDateInfo();
+        }, 60000);
+    </script>
+</body>
+</html>
